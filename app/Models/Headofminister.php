@@ -9,11 +9,14 @@ class Headofminister extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'card_place',
         'name',
         'postname',
         'email',
         'phone',
         'twitter',
+        'facebook',
+        'instagram',
         'profile_image',
     ];
 }

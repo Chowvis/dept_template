@@ -16,7 +16,8 @@
           hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none
            focus:ring-2 focus:ring-cyan-700 focus:ring-offset-2 transition ease-in-out duration-150">edit</button>
         <div x-show="modal" class="p-16 bg-gray-100 fixed top-0 left-0 bottom-0 z-10 bg-slate-500/5 flex items-center justify-center w-full">
-            <div class="w-full md:w-[80%] bg-white p-5 rounded-lg shadow-3xl" @click.outside = "modal = false">
+            <div class="w-full md:w-[80%] bg-white p-5 rounded-lg shadow-3xl relative" >
+                <i class="fa-solid fa-circle-xmark absolute right-2 top-1 text-red-500 text-xl hover:text-red-800 hover:scale-110 duration-200 ease-in-out" @click = "modal = false"></i>
                 <h1 class="text-center font-semibold text-xl p-2">Edit About Department</h1>
                 <div x-data="{showMessage: false}" x-init="window.addEventListener('flashMessage', () => { showMessage = true; setTimeout(() => { showMessage = false; }, 3000); })">
                     @if (session('success'))
@@ -197,6 +198,11 @@
                     <div class="grid lg:grid-cols-2 grid-cols-1 pb-5 gap-4">
                         {{-- left card --}}
                         <div x-data = "{cardleft:false}" class="flex flex-col border border-slate-200 rounded-md bg-white p-6 gap-4">
+                            <div class="inline-flex ">
+                                <h1 class="font-bold text-xs text-slate-700 bg-slate-200 py-2 px-4 rounded-full">
+                                    Head of Ministry card
+                                </h1>
+                            </div>
                             <div class="flex justify-left gap-3 h-full w-full object-cover relative">
                                 @if ($card1===null)
                                     <img src="logos/user.png" class="rounded-lg h-36 w-36"  alt="">
@@ -206,8 +212,8 @@
 
                                 <div class="flex flex-col justify-start">
 
-                                    <h2 class="font-bold text-2xl">{{$card1===null?'Xyz abc':$card1->name}}</h2>
-                                    <p class="text-lg font-semibold text-gray-500">{{$card1===null?'Post name':$card1->postname}}</p>
+                                    <h2 class="font-bold text-2xl">{{$card1===null?'Jhon Carlo':$card1->name}}</h2>
+                                    <p class="text-lg font-semibold text-gray-500">{{$card1===null?'Assistant proffessor':$card1->postname}}</p>
                                     <div class="flex flex-col mt-2 gap-3">
                                         <p class="text-xs"><i class="fa-solid fa-phone rounded-full text-blue-800 bg-blue-400/50 p-2 mr-1"></i>{{$card1===null?'1122334455':$card1->phone}}</p>
                                         <p class="text-xs"><i class="fa-solid fa-envelope rounded-full text-white bg-red-500 p-2 mr-1"></i>{{$card1===null?'admin@test.test':$card1->email}}</p>
@@ -223,11 +229,47 @@
                                     </i>
                                 </button>
                             </div>
-                            <p class="text-xs"><i class="fa-brands fa-x-twitter rounded-full text-white bg-black p-2 mr-1"></i>{{$card1===null?'admin@test.test':$card1->twitter}}</p>
+                            <div x-data="{ showTwitter: false,showFacebook: false,showInsta : false }" class="">
+                                <!-- Icon -->
+                                <div class="flex justify-end gap-3">
+                                    <a href="#" class="relative">
+                                        <i @mouseenter="showTwitter = true"
+                                        @mouseleave="showTwitter = false" class="fa-brands fa-x-twitter rounded-full text-white bg-black p-2 mr-1">
+                                        </i>
+                                        <div
+                                        x-show="showTwitter"
+                                        x-transition
+                                        class="absolute bg-gray-800 text-white text-sm rounded-md px-4 py-2"
+                                        >
+                                        {{$card1===null?'admin@test.test':$card1->twitter}}
+                                        </div>
+                                    </a>
+
+                                    <a href="#">
+                                        <i @mouseenter="showFacebook = true"
+                                        @mouseleave="showFacebook = false" class="fa-brands fa-facebook rounded-full text-white bg-black p-2 mr-1">
+                                        </i>
+                                    </a>
+
+                                    <a href="#">
+                                        <i @mouseenter="showInsta = true"
+                                        @mouseleave="showInsta = false" class="fa-brands fa-instagram rounded-full text-white bg-black p-2 mr-1">
+                                        </i>
+                                    </a>
+                                </div>
+
+
+
+
+                                <!-- Text to show on hover -->
+
+                            </div>
+
 
                             <div x-show="cardleft" class="p-16 bg-gray-100 fixed top-0 left-0 bottom-0 z-50 bg-slate-500/5 flex items-center justify-center w-full">
-                                <div class="w-full md:w-[80%] bg-white p-5 rounded-lg shadow-3xl" @click.outside = "cardleft = false">
-                                    <h1 class="text-center font-semibold text-xl p-2 mb-4">Edit Card 1</h1>
+                                <div class="w-full md:w-[80%] bg-white p-5 rounded-lg shadow-3xl relative">
+                                    <i class="fa-solid fa-circle-xmark absolute right-2 top-1 text-red-500 text-xl hover:text-red-800 hover:scale-110 duration-200 ease-in-out" @click = "cardleft = false"></i>
+                                    <h1 class="text-center font-semibold text-xl p-2 mb-4">Edit card 1</h1>
                                     <div x-data="{showMessage: false}" x-init="window.addEventListener('flashMessage', () => { showMessage = true; setTimeout(() => { showMessage = false; }, 3000); })">
                                         @if (session('success_card'))
 
@@ -237,7 +279,8 @@
 
                                         @endif
                                     </div>
-                                    <form class=" bg-white border border-gray-300 rounded-md p-3" wire:submit="editminister">
+                                    {{-- form 1 --}}
+                                    <form class=" bg-white border border-gray-300 rounded-md p-3" wire:submit="editleftcard">
 
                                         {{-- image file --}}
                                         <div class="relative flex justify-center">
@@ -247,12 +290,12 @@
                                                         @if ($card1===null)
                                                             <img src="logos/user.png" class="h-28 w-28 object-cover"  alt="">
                                                         @else
-                                                            <img src="/storage/{{$card1->profile_image}}" class=" w-28 object-cover" alt="">
+                                                            <img src="/storage/{{$card1->profile_image}}" class="h-28 w-28 object-cover" alt="">
                                                         @endif
 
                                                     </div>
 
-                                                    <input type="file" name="profile_image" wire:model="minister.profile_image" id="profile_image" accept="image/*" class="hidden ">
+                                                    <input type="file" name="profile_image" wire:model="minister.profile_image" id="profile_image" accept="image/*" class=" ">
                                                     <label for="profile_image" class="cursor-pointer absolute  -bottom-4 flex items-center justify-center w-8 h-8 bg-white rounded-full shadow-lg hover:bg-gray-300">
                                                         <i class="fa-solid fa-pen text-xs text-gray-500"></i>
                                                     </label>
@@ -272,7 +315,7 @@
 
                                         <div class="grid lg:grid-cols-2 grid-cols-1 pb-5 mt-32 border-t border-gray-300">
                                             <div class="flex flex-col p-3">
-                                                <label for="fname" class="text-sm mt-5 mb-2 font-bold">Full Name</label>
+                                                <label for="fname" class="text-sm mt-3 mb-2 font-bold">Full Name</label>
                                                 <input value="" type="text" name="name" wire:model="minister.name" placeholder="Enter full name" class="border border-gray-300 rounded-md p-2 text-sm">
                                                 @error('minister.name')
                                                     <span class="text-red-500 text-sm">{{$message}}</span>
@@ -280,7 +323,7 @@
                                             </div>
 
                                             <div class="flex flex-col p-3">
-                                                <label for="postname" class="text-sm mt-5 mb-2 font-bold">Post Name</label>
+                                                <label for="postname" class="text-sm mt-3 mb-2 font-bold">Post Name</label>
                                                 <input value="" type="text" name="postname" wire:model="minister.postname" placeholder="Enter Designation" class="border border-gray-300 rounded-md p-2 text-sm">
                                                 @error('minister.postname')
                                                     <span class="text-red-500 text-sm">{{$message}}</span>
@@ -288,7 +331,7 @@
                                             </div>
 
                                             <div class="flex flex-col p-3">
-                                                <label for="email" class="text-sm mt-5 mb-2 font-bold">Email</label>
+                                                <label for="email" class="text-sm mt-3 mb-2 font-bold">Email</label>
                                                 <input value="" type="email" wire:model="minister.email" placeholder="example@gmail.com" class="border border-gray-300 rounded-md p-2 text-sm">
                                                 @error('minister.email')
                                                     <span class="text-red-500 text-sm">{{$message}}</span>
@@ -296,7 +339,7 @@
                                             </div>
 
                                             <div class="flex flex-col p-3">
-                                                <label for="phone" class="text-sm mt-5 mb-2 font-bold">Phone No.</label>
+                                                <label for="phone" class="text-sm mt-3 mb-2 font-bold">Phone No.</label>
                                                 <input value="" type="tel" name="phone" wire:model="minister.phone" maxlength="10" minlength="10"  placeholder="Enter Phone number" class="border border-gray-300 rounded-md p-2 text-sm">
                                                 @error('minister.phone')
                                                     <span class="text-red-500 text-sm">{{$message}}</span>
@@ -304,9 +347,25 @@
                                             </div>
 
                                             <div class="flex flex-col p-3">
-                                                <label for="twitter" class="text-sm mt-5 mb-2 font-bold">Twitter link</label>
+                                                <label for="twitter" class="text-sm mt-3 mb-2 font-bold">Twitter link</label>
                                                 <input value="" type="url" name="twitter" wire:model="minister.twitter"  placeholder="Enter twitter link" class="border border-gray-300 rounded-md p-2 text-sm">
                                                 @error('minister.twitter')
+                                                    <span class="text-red-500 text-sm">{{$message}}</span>
+                                                @enderror
+                                            </div>
+
+                                            <div class="flex flex-col p-3">
+                                                <label for="facebook" class="text-sm mt-3 mb-2 font-bold">Facebook link</label>
+                                                <input value="" type="url" name="facebook" wire:model="minister.facebook"  placeholder="Enter facebook link" class="border border-gray-300 rounded-md p-2 text-sm">
+                                                @error('minister.facebook')
+                                                    <span class="text-red-500 text-sm">{{$message}}</span>
+                                                @enderror
+                                            </div>
+
+                                            <div class="flex flex-col p-3">
+                                                <label for="instagram" class="text-sm mt-3 mb-2 font-bold">Instagram link</label>
+                                                <input value="" type="url" name="instagram" wire:model="minister.instagram"  placeholder="Enter instagram link" class="border border-gray-300 rounded-md p-2 text-sm">
+                                                @error('minister.instagram')
                                                     <span class="text-red-500 text-sm">{{$message}}</span>
                                                 @enderror
                                             </div>
@@ -329,7 +388,7 @@
                             </div>
                         </div>
                         {{-- right card --}}
-                        <div class="flex flex-col border border-slate-200 rounded-md bg-white p-6 gap-4">
+                        {{-- <div class="flex flex-col border border-slate-200 rounded-md bg-white p-6 gap-4">
                             <div class="flex justify-center items-center h-36 w-full object-cover relative">
                                 <img src="gallery/event2.jpg" class="rounded-full h-36 w-36"  alt="">
                                 <div class="absolute right-0 top-0">
@@ -352,7 +411,7 @@
                                 <p class="text-xs"><i class="fa-brands fa-x-twitter rounded-full text-white bg-black p-2 mr-1"></i>admin@test.test</p>
 
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

@@ -24,10 +24,22 @@ class DeptAbout extends Component
     {
         $dbabout = About::where('id','=',1)->first();
         $dbaddress = About::where('id','=',1)->first();
-        $card1 = Headofminister::where('id','=',1)->first();
+        $card1 = Headofminister::where('card_place','=','1')->first();
+
+        if($card1){
+            $this->minister->name = $card1->name;
+            $this->minister->postname = $card1->postname;
+            $this->minister->email = $card1->email;
+            $this->minister->phone = $card1->phone;
+            $this->minister->twitter = $card1->twitter;
+            $this->minister->facebook =$card1->facebook;
+            $this->minister->instagram = $card1->instagram;
+            // $this->minister->profile_image = $card1->profile_image;
+
+        }
         if($dbabout === null){
             $dbabout = "No data availale";
-
+            $this->minister->name = $card1->name;
             return view('livewire.dept-about',[
                 'dbabout' => $dbabout,
                 'dbaddress' => $dbaddress,
@@ -116,15 +128,18 @@ class DeptAbout extends Component
 
 
 
-    public function editminister(){
+    public function editleftcard(){
+        // dd('hello');
         $validated = $this->minister->validate();
+
+        $validated['card_place']=$this->minister->card_place = "1";
 
         if($this->minister->profile_image){
             $validated['profile_image'] = $this->minister->profile_image->store('card1','public');
         }
 
 
-        $card1 = Headofminister::where('id','=',1)->first();
+        $card1 = Headofminister::where('card_place','=','1')->first();
 
         if($card1 === null){
 
@@ -139,6 +154,35 @@ class DeptAbout extends Component
             $this->dispatch('flashMessage');
 
         }
+
+    }
+
+    public function editrightcard(){
+        // dd('hello');
+        $validated = $this->minister->validate();
+        $validated['card_place']=$this->minister->card_place = "2";
+        dd($validated);
+
+        // if($this->minister->profile_image){
+        //     $validated['profile_image'] = $this->minister->profile_image->store('card1','public');
+        // }
+
+
+        // $card1 = Headofminister::where('id','=',1)->first();
+
+        // if($card1 === null){
+
+        //     Headofminister::create($validated);
+        //     session()->flash('success_card', 'Head of department is added successfully');
+        //     $this->dispatch('flashMessage');
+        // }
+        // else{
+
+        //     $card1->update($validated);
+        //     session()->flash('success_card', 'Head of department is added successfully');
+        //     $this->dispatch('flashMessage');
+
+        // }
 
     }
 

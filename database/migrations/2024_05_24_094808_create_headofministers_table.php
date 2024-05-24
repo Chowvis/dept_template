@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('headofministers', function (Blueprint $table) {
             $table->id();
+            $table->string('card_place');
             $table->string('name');
             $table->string('postname');
             $table->string('email');
             $table->string('phone');
-            $table->string('twitter');
+            $table->string('twitter')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('instagram')->nullable();
             $table->string('profile_image')->nullable();
             $table->timestamps();
         });

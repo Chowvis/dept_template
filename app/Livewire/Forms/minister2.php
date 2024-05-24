@@ -6,31 +6,23 @@ use Livewire\Attributes\Rule;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
-class minister extends Form
+class minister2 extends Form
 {
-    // card1
-
-    public function card1(){
-
-    }
     #[Rule('required|min:3')]
-    public $name;
+    public $name2;
     #[Rule('required|min:3')]
-    public $postname;
+    public $postname2;
     #[Rule('required|min:3')]
-    public $email;
+    public $email2;
     #[Rule('required|min:10')]
-    public $phone;
+    public $phone2;
     #[Rule('')]
-    public $twitter;
+    public $twitter2;
     #[Rule('')]
-    public $facebook;
+    public $facebook2;
     #[Rule('')]
-    public $instagram;
+    public $instagram2;
     #[Rule('required|image|max:1024')]
-    public $profile_image;
-    public $card_place;
-
-    // card 2
-
+    public $profile_image2;
+    public $card_place2;
 }
