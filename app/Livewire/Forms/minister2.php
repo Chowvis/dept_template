@@ -9,20 +9,20 @@ use Livewire\Form;
 class minister2 extends Form
 {
     #[Rule('required|min:3')]
-    public $name2;
+    public $name;
     #[Rule('required|min:3')]
-    public $postname2;
+    public $postname;
     #[Rule('required|min:3')]
-    public $email2;
+    public $email;
     #[Rule('required|min:10')]
-    public $phone2;
+    public $phone;
     #[Rule('')]
-    public $twitter2;
+    public $twitter;
     #[Rule('')]
-    public $facebook2;
+    public $facebook;
     #[Rule('')]
-    public $instagram2;
-    #[Rule('required|image|max:1024')]
-    public $profile_image2;
-    public $card_place2;
+    public $instagram;
+    #[Rule('nullable|image|max:1024')]
+    public $profile_image;
+    public $card_place;
 }

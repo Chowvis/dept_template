@@ -4,9 +4,12 @@ namespace App\Livewire;
 
 
 use App\Livewire\Forms\minister;
+use App\Livewire\Forms\minister2;
 use App\Models\About;
 use App\Models\Headofminister;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -19,12 +22,14 @@ class DeptAbout extends Component
     public $about;
 
     public minister $minister;
+    public minister2 $minister2;
 
     public function render()
     {
         $dbabout = About::where('id','=',1)->first();
         $dbaddress = About::where('id','=',1)->first();
         $card1 = Headofminister::where('card_place','=','1')->first();
+        $card2 = Headofminister::where('card_place','=','2')->first();
 
         if($card1){
             $this->minister->name = $card1->name;
@@ -37,6 +42,17 @@ class DeptAbout extends Component
             // $this->minister->profile_image = $card1->profile_image;
 
         }
+        if($card2){
+            $this->minister2->name = $card2->name;
+            $this->minister2->postname = $card2->postname;
+            $this->minister2->email = $card2->email;
+            $this->minister2->phone = $card2->phone;
+            $this->minister2->twitter = $card2->twitter;
+            $this->minister2->facebook =$card2->facebook;
+            $this->minister2->instagram = $card2->instagram;
+            // $this->minister->profile_image = $card1->profile_image;
+
+        }
         if($dbabout === null){
             $dbabout = "No data availale";
             $this->minister->name = $card1->name;
@@ -44,6 +60,7 @@ class DeptAbout extends Component
                 'dbabout' => $dbabout,
                 'dbaddress' => $dbaddress,
                 'card1' => $card1,
+                'card2' => $card2,
             ]);
         }
         else{
@@ -55,6 +72,7 @@ class DeptAbout extends Component
             'dbabout' => $this->about,
             'dbaddress' => $dbaddress,
             'card1' => $card1,
+            'card2' => $card2,
         ]);
         }
 
@@ -127,65 +145,107 @@ class DeptAbout extends Component
     }
 
 
-
+// editing the card 1
     public function editleftcard(){
         // dd('hello');
+        $card1 = Headofminister::where('card_place','=','1')->first();
         $validated = $this->minister->validate();
 
         $validated['card_place']=$this->minister->card_place = "1";
 
-        if($this->minister->profile_image){
-            $validated['profile_image'] = $this->minister->profile_image->store('card1','public');
-        }
-
-
-        $card1 = Headofminister::where('card_place','=','1')->first();
-
         if($card1 === null){
-
+            if($this->minister->profile_image){
+                $validated['profile_image'] = $this->minister->profile_image->store('card1','public');
+            }
             Headofminister::create($validated);
             session()->flash('success_card', 'Head of department is added successfully');
             $this->dispatch('flashMessage');
         }
         else{
+            if($this->minister->profile_image){
+                $validated['profile_image'] = $this->minister->profile_image->store('card1','public');
+                if($card1->profile_image){
+                    Storage::disk('public')->delete($card1->profile_image);
+                    $this->deleteTempFiles();
+                }
+
+            }
+            elseif($card1->profile_image){
+                $validated['profile_image'] = $card1->profile_image;
+            }
 
             $card1->update($validated);
             session()->flash('success_card', 'Head of department is added successfully');
             $this->dispatch('flashMessage');
 
+
+
         }
 
+
+    }
+    public function deleteTempFiles()
+    {
+        $temporaryFiles = Storage::allFiles('livewire-tmp');
+
+        foreach ($temporaryFiles as $file) {
+            // Storage::disk('local')->delete($file);
+
+            // Check if the file is older than a few minutes before deleting
+            // try {
+            //     // Check if the file is older than 5 minutes before deleting
+            //     if (now()->diffInMinutes(Storage::disk('local')->lastModified($file)) > 5) {
+            //         Storage::disk('local')->delete($file);
+            //     }
+            // } catch (Exception $e) {
+            //     // Log the error or handle it as needed
+
+            // }
+        };
+    }
+    // deleteing the card 1
+    public function deletecard1(){
+        dd("delete");
     }
 
     public function editrightcard(){
-        // dd('hello');
-        $validated = $this->minister->validate();
-        $validated['card_place']=$this->minister->card_place = "2";
-        dd($validated);
+        $card2 = Headofminister::where('card_place','=','2')->first();
+        $validated = $this->minister2->validate();
 
-        // if($this->minister->profile_image){
-        //     $validated['profile_image'] = $this->minister->profile_image->store('card1','public');
-        // }
+        $validated['card_place']=$this->minister2->card_place = "2";
+
+        if($card2 === null){
+            if($this->minister2->profile_image){
+                $validated['profile_image'] = $this->minister2->profile_image->store('card2','public');
+            }
+            Headofminister::create($validated);
+            session()->flash('success_card', 'Head of department is added successfully');
+            $this->dispatch('flashMessage');
+        }
+        else{
+            if($this->minister2->profile_image){
+                $validated['profile_image'] = $this->minister2->profile_image->store('card2','public');
+                if($card2->profile_image){
+                    Storage::disk('public')->delete($card2->profile_image);
+                    $this->deleteTempFiles();
+                }
+
+            }
+            elseif($card2->profile_image){
+                $validated['profile_image'] = $card2->profile_image;
+            }
+
+            $card2->update($validated);
+            session()->flash('success_card', 'Head of department is updated successfully');
+            $this->dispatch('flashMessage');
 
 
-        // $card1 = Headofminister::where('id','=',1)->first();
 
-        // if($card1 === null){
-
-        //     Headofminister::create($validated);
-        //     session()->flash('success_card', 'Head of department is added successfully');
-        //     $this->dispatch('flashMessage');
-        // }
-        // else{
-
-        //     $card1->update($validated);
-        //     session()->flash('success_card', 'Head of department is added successfully');
-        //     $this->dispatch('flashMessage');
-
-        // }
-
+        }
     }
-
+    public function deletecard2(){
+        dd("delete2");
+    }
 
 
 }

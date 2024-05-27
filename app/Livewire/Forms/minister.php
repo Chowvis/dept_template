@@ -27,7 +27,7 @@ class minister extends Form
     public $facebook;
     #[Rule('')]
     public $instagram;
-    #[Rule('required|image|max:1024')]
+    #[Rule('nullable|image|max:1024')]
     public $profile_image;
     public $card_place;
 

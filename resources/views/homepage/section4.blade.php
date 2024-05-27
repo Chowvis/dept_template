@@ -69,21 +69,31 @@
         {{-- individual card --}}
         <div id="individual_card" class="flex flex-col justify-center items-center md:flex-row border-collapse border p-0 ">
             <div id="left_card" class="flex justify-center items-center w-2/6 h-32">
-                <div id="pp_container">
-                    <img src="logos/user.png" class="h-20" alt="">
+                <div class="w-24 h-24 overflow-hidden flex justify-center items-center rounded-full">
+                    @if ($card1 === null)
+                    <div id="pp_container">
+                        <img src="logos/user.png" class="h-20" alt="">
+                    </div>
+                    @elseif ($card1->profile_image)
+                        <div id="pp_container">
+                            <img src="/storage/{{$card1->profile_image}}" class=" h-24 object-cover" alt="">
+                        </div>
+                    @endif
                 </div>
+
+
             </div>
-            <div id="right_card" class="flex flex-col w-4/6 p-2">
+            <div id="right_card" class="flex flex-col w-4/6 p-2 gap-2">
                 <div>
-                    <p class="font-semibold">Hon'ble</p>
-                    <p>Chief Minister Name</p>
+                    <p class="font-semibold">{{$card1===null?"Hon'ble":$card1->postname}}</p>
+                    <p>{{$card1===null?"Hon'ble":$card1->name}}</p>
                 </div>
                 <div class="flex">
-                    <div class="w-1/2 text-cyan-700">
+                    <div class="w-1/2 text-cyan-700 flex items-center">
                         <i class="fa-solid fa-phone pr-1"></i>
                         <a href="" class="text-xs">Contact</a>
                     </div>
-                    <div class="w-1/2 text-cyan-700">
+                    <div class="w-1/2 text-cyan-700 flex items-center">
                         <i class="fa-solid fa-address-card pr-1"></i>
                         <a href="" class="text-xs">Profile</a>
                     </div>
