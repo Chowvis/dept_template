@@ -55,7 +55,7 @@ class DeptAbout extends Component
         }
         if($dbabout === null){
             $dbabout = "No data availale";
-            $this->minister->name = $card1->name;
+            // $this->minister->name = $card1->name;
             return view('livewire.dept-about',[
                 'dbabout' => $dbabout,
                 'dbaddress' => $dbaddress,
@@ -184,28 +184,16 @@ class DeptAbout extends Component
 
 
     }
-    public function deleteTempFiles()
-    {
-        $temporaryFiles = Storage::allFiles('livewire-tmp');
 
-        foreach ($temporaryFiles as $file) {
-            // Storage::disk('local')->delete($file);
-
-            // Check if the file is older than a few minutes before deleting
-            // try {
-            //     // Check if the file is older than 5 minutes before deleting
-            //     if (now()->diffInMinutes(Storage::disk('local')->lastModified($file)) > 5) {
-            //         Storage::disk('local')->delete($file);
-            //     }
-            // } catch (Exception $e) {
-            //     // Log the error or handle it as needed
-
-            // }
-        };
-    }
     // deleteing the card 1
     public function deletecard1(){
-        dd("delete");
+
+        $card1 = Headofminister::where('card_place','=','1')->first();
+        if($card1->profile_image){
+            Storage::disk('public')->delete($card1->profile_image);
+
+        }
+        $card1->delete();
     }
 
     public function editrightcard(){
@@ -244,7 +232,13 @@ class DeptAbout extends Component
         }
     }
     public function deletecard2(){
-        dd("delete2");
+
+        $card2 = Headofminister::where('card_place','=','2')->first();
+        if($card2->profile_image){
+            Storage::disk('public')->delete($card2->profile_image);
+
+        }
+        $card2->delete();
     }
 
 

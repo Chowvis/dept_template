@@ -197,7 +197,7 @@
                 <div class="w-full rounded-lg">
                     <div class="grid lg:grid-cols-2 grid-cols-1 pb-5 gap-4">
                         {{-- left card --}}
-                        <div x-data = "{cardleft:false,removecardleft:false}" class="flex flex-col border border-slate-200 rounded-md bg-white p-6 gap-4">
+                        <div x-data = "{cardleft:false,removecardleft:false,confirmmessage1:false}" class="flex flex-col border border-slate-200 rounded-md bg-white p-6 gap-4">
                             <div class="inline-flex ">
                                 <h1 class="font-bold text-xs text-slate-700 bg-slate-200 py-2 px-4 rounded-full">
                                     Head of Ministry card
@@ -399,13 +399,13 @@
                                     </form>
                                 </div>
                             </div>
-                            <div x-show="removecardleft" x-transition x-cloak class="p-16 bg-gray-100 fixed top-0 left-0 bottom-0 z-50 bg-slate-500/5 flex items-center justify-center w-full">
+                            <div x-show="removecardleft" x-transition:enter.scale.20.duration.300ms x-transition:leave.scale.20.duration.100ms x-cloak class="p-16 bg-gray-100 fixed top-0 left-0 bottom-0 z-50 bg-slate-500/0 flex items-center justify-center w-full">
                                 <div class="w-full md:w-[50%] bg-white p-5 rounded-lg shadow-3xl relative">
                                     <i class="fa-solid fa-circle-xmark absolute right-2 top-1 text-red-500 text-xl hover:text-red-800 hover:scale-110 duration-200 ease-in-out" @click = "removecardleft = false"></i>
                                     <h1 class="text-center font-semibold text-xl p-2 mb-4">Are you sure to delete?</h1>
                                     <h1 class="text-center text-slate-500 font-semibold text-sm p-2 mb-4">Note: All the data reguarding this card will be deleted!</h1>
                                     <form wire:submit = "deletecard1" class="flex justify-center gap-3">
-                                        <button class=" inline-flex items-center px-4 py-2 bg-red-600 border border-transparent
+                                        <button @click = "confirmmessage1 = true,removecardleft = false " class=" inline-flex items-center px-4 py-2 bg-red-600 border border-transparent
                                         rounded-md font-semibold text-xs text-white uppercase tracking-widest
                                          hover:bg-red-800 ">Delete
                                         </button>
@@ -417,9 +417,21 @@
 
                                 </div>
                             </div>
+                            <div x-show="confirmmessage1"
+                                x-transition
+                                x-cloak
+                                class="p-16 bg-gray-100 fixed top-0 left-0 bottom-0 z-50 bg-slate-500/5 flex items-center justify-center w-full">
+                                <div class="w-full md:w-[50%] bg-white p-5 rounded-lg shadow-3xl relative ">
+                                    <div class="flex flex-col items-center justify-center p-10 ">
+                                        <i class="fa-regular fa-circle-check text-3xl text-green-800"></i>
+                                        <h1 class="text-center font-semibold text-xl p-2 mb-4 text-green-800">Card deleted successfully.</h1>
+                                    </div>
+                                    <i @click = "confirmmessage1 = false" class="fa-solid fa-xmark absolute right-2 top-2 cursor-pointer "></i>
+                                </div>
+                            </div>
                         </div>
                         {{-- right card --}}
-                        <div x-data = "{cardright:false,removecardright:false}" class="flex flex-col border border-slate-200 rounded-md bg-white p-6 gap-4">
+                        <div x-data = "{cardright:false,removecardright:false,confirmmessage2:false,}" class="flex flex-col border border-slate-200 rounded-md bg-white p-6 gap-4">
                             <div class="inline-flex ">
                                 <h1 class="font-bold text-xs text-slate-700 bg-slate-200 py-2 px-4 rounded-full">
                                     Head of department card
@@ -627,7 +639,7 @@
                                     <h1 class="text-center font-semibold text-xl p-2 mb-4">Are you sure to delete?</h1>
                                     <h1 class="text-center text-slate-500 font-semibold text-sm p-2 mb-4">Note: All the data reguarding this card will be deleted!</h1>
                                     <form wire:submit = "deletecard2" class="flex justify-center gap-3">
-                                        <button class=" inline-flex items-center px-4 py-2 bg-red-600 border border-transparent
+                                        <button @click = "confirmmessage2 = true, removecardright = false" class=" inline-flex items-center px-4 py-2 bg-red-600 border border-transparent
                                         rounded-md font-semibold text-xs text-white uppercase tracking-widest
                                          hover:bg-red-800 ">Delete
                                         </button>
@@ -637,6 +649,18 @@
                                         </div>
                                     </form>
 
+                                </div>
+                            </div>
+                            <div x-show="confirmmessage2"
+                                x-transition
+                                x-cloak
+                                class="p-16 bg-gray-100 fixed top-0 left-0 bottom-0 z-50 bg-slate-500/5 flex items-center justify-center w-full">
+                                <div class="w-full md:w-[50%] bg-white p-5 rounded-lg shadow-3xl relative ">
+                                    <div class="flex flex-col items-center justify-center p-10 ">
+                                        <i class="fa-regular fa-circle-check text-3xl text-green-800"></i>
+                                        <h1 class="text-center font-semibold text-xl p-2 mb-4 text-green-800">Card deleted successfully.</h1>
+                                    </div>
+                                    <i @click = "confirmmessage2 = false" class="fa-solid fa-xmark absolute right-2 top-2 cursor-pointer "></i>
                                 </div>
                             </div>
                         </div>
