@@ -11,17 +11,21 @@
         </div>
     </div>
     {{-- right logo / having two or can be more which have one fix logo for digital india and other editable--}}
-    <div class="flex items-center">
-        <div id="db_logo1" class="hidden">
+    <div class="flex items-center gap-2">
+        <div id="db_logo1" class="hidden sm:block">
             {{-- will be used by admin --}}
-            <img src="" alt="">
+
+
+            @if ($logo1)
+                <img src="/storage/{{$logo1->logoimage}}" class="w-36">
+            @endif
         </div>
         <div id="db_logo2" class="hidden">
             {{-- will be used by admin --}}
             <img src="" alt="">
         </div>
         <div class="hidden sm:block">
-            <img src="logos/digitalindia.png" alt="">
+            <img src="logos/digitalindia.png" class=" w-36" alt="">
         </div>
     </div>
 </div>

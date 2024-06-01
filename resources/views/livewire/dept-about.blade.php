@@ -284,7 +284,7 @@
                                     <div x-data="{showMessage: false}" x-init="window.addEventListener('flashMessage', () => { showMessage = true; setTimeout(() => { showMessage = false; }, 3000); })">
                                         @if (session('success_card'))
 
-                                            <div x-show="showMessage" class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+                                            <div x-show="showMessage" x-transition:enter.scale.50.duration.300ms x-transition:leave.scale.50.duration.300ms class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
                                                 <span class="font-medium">{{session('success_card')}}</span>
                                             </div>
 

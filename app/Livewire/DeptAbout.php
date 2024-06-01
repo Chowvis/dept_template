@@ -24,6 +24,10 @@ class DeptAbout extends Component
     public minister $minister;
     public minister2 $minister2;
 
+    public function show(){     //this renders dashboard to page
+        return view('navigationtab.dashboard');
+    }
+
     public function render()
     {
         $dbabout = About::where('id','=',1)->first();
@@ -132,9 +136,7 @@ class DeptAbout extends Component
     }
 
 
-    public function show(){     //this renders dashboard to page
-        return view('navigationtab.dashboard');
-    }
+
 
     public function showeditabout(){     //this renders dashboard to page
         $dbaddress = About::where('id','=',1)->first();
@@ -166,7 +168,7 @@ class DeptAbout extends Component
                 $validated['profile_image'] = $this->minister->profile_image->store('card1','public');
                 if($card1->profile_image){
                     Storage::disk('public')->delete($card1->profile_image);
-                    $this->deleteTempFiles();
+
                 }
 
             }
@@ -215,7 +217,7 @@ class DeptAbout extends Component
                 $validated['profile_image'] = $this->minister2->profile_image->store('card2','public');
                 if($card2->profile_image){
                     Storage::disk('public')->delete($card2->profile_image);
-                    $this->deleteTempFiles();
+
                 }
 
             }
