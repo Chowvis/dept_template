@@ -14,7 +14,7 @@
                                 Logo 1
                             </h1>
                         </div>
-                        <div class="flex justify-left gap-3 h-full w-full object-cover relative">
+                        <div class="flex justify-left items-center gap-3 h-full w-full object-cover relative">
                             @if ($logo1===null)
                                 <i class="fa-solid fa-mountain-sun text-3xl"></i>
                             @elseif ($logo1->logoimage)
@@ -131,7 +131,7 @@
                         <div x-show="removecardleft" x-transition:enter.scale.20.duration.300ms x-transition:leave.scale.20.duration.100ms x-cloak class="p-16 bg-gray-100 fixed top-0 left-0 bottom-0 z-50 bg-slate-500/0 flex items-center justify-center w-full">
                             <div class="w-full md:w-[50%] bg-white p-5 rounded-lg shadow-3xl relative">
                                 <i class="fa-solid fa-circle-xmark absolute right-2 top-1 text-red-500 text-xl hover:text-red-800 hover:scale-110 duration-200 ease-in-out" @click = "removecardleft = false"></i>
-                                <h1 class="text-center font-semibold text-xl p-2 mb-4">Are you sure to delete?</h1>
+                                <h1 class="text-center font-semibold text-xl p-2 mb-4">Are you sure to delete this logo?</h1>
                                 <h1 class="text-center text-slate-500 font-semibold text-sm p-2 mb-4">Note: All the data reguarding this card will be deleted!</h1>
                                 <form wire:submit = "deletelogo1" class="flex justify-center gap-3">
                                     <button @click = "confirmmessage1 = true,removecardleft = false " class=" inline-flex items-center px-4 py-2 bg-red-600 border border-transparent
@@ -153,23 +153,146 @@
                             <div class="w-full md:w-[50%] bg-white p-5 rounded-lg shadow-3xl relative ">
                                 <div class="flex flex-col items-center justify-center p-10 ">
                                     <i class="fa-regular fa-circle-check text-3xl text-green-800"></i>
-                                    <h1 class="text-center font-semibold text-xl p-2 mb-4 text-green-800">Card deleted successfully.</h1>
+                                    <h1 class="text-center font-semibold text-xl p-2 mb-4 text-green-800">Logo deleted successfully.</h1>
                                 </div>
                                 <i @click = "confirmmessage1 = false" class="fa-solid fa-xmark absolute right-2 top-2 cursor-pointer "></i>
                             </div>
                         </div>
                     </div>
-                    {{-- right card --}}
-
                 </div>
             </div>
         </div>
     </div>
+
+
     {{-- events --}}
     <div>
-        <div>
+        <div x-data = "{modal:false}">
             <p class="text-gray-800 font-bold text-xl">Events</p>
-            <p class="py-2 text-gray-400">Add department events with images.</p>
+            <p class="py-2 text-gray-400">Add department events with images and description about the event.</p>
+            <div class="flex justify-end items-center">
+                <div @click = "modal = true" class=" inline-flex items-center px-4 py-2
+                             rounded-md font-bold text-xs text-white bg-blue-600 uppercase tracking-widest border
+                             hover:shadow-xl hover:bg-blue-700 cursor-pointer"><i  class="fa-regular fa-plus text-white text-xl mr-3"></i>Add Event
+                </div>
+            </div>
+            <div x-show="modal" x-transition x-cloak class="p-16 bg-gray-100 fixed top-0 left-0 bottom-0 z-10 bg-slate-500/5 flex items-center justify-center w-full">
+                <div class="w-full md:w-[80%] bg-white p-5 rounded-lg shadow-3xl relative" >
+                    <i class="fa-solid fa-circle-xmark absolute right-2 top-1 text-red-500 text-xl hover:text-red-800 hover:scale-110 duration-200 ease-in-out" @click = "modal = false"></i>
+                    <h1 class="text-center font-semibold text-xl p-2">Add new Event</h1>
+                    <div x-data="{showMessage: false}" x-init="window.addEventListener('flashMessage', () => { showMessage = true; setTimeout(() => { showMessage = false; }, 3000); })">
+                        @if (session('success'))
+
+                            <div x-show="showMessage" x-transition class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+                                <span class="font-medium">{{session('success')}}</span>
+                            </div>
+
+                        @endif
+                    </div>
+                    <form class="" action="" wire:submit="addevent">
+                        <div class="grid lg:grid-cols-2 grid-cols-1 pb-5">
+                            <div class="flex flex-col p-3">
+                                <label for="eventtitle" class="text-sm mt-3 mb-2 font-bold">Event Title :</label>
+                                <input value="" type="text" name="name" wire:model="event.title" placeholder="Enter event title" class="border border-gray-300 rounded-md p-2 text-sm">
+                                @error('event.title')
+                                    <span class="text-red-500 text-sm">{{$message}}</span>
+                                @enderror
+                            </div>
+                            <div class="flex flex-col p-3">
+                                <label for="eventdate" class="text-sm mt-3 mb-2 font-bold">Date of Event held :</label>
+                                <input value="" type="date" name="name" wire:model="event.date" placeholder="Enter event title" class="border border-gray-300 rounded-md p-2 text-sm">
+                                @error('event.date')
+                                    <span class="text-red-500 text-sm">{{$message}}</span>
+                                @enderror
+                            </div>
+                            <div class="flex flex-col col-span-2 p-3">
+                                <label for="description" class="text-sm mt-3 mb-2 font-bold">Description about the event :</label>
+                                <textarea class="w-full rounded-md border-gray-300 border-2" name="description" wire:model="event.description" id="" cols="30" rows="6"></textarea>
+                                @error('event.description')
+                                    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                        <span class="font-medium">{{$message}}</span>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="file" class="text-sm mt-3 mb-2 font-bold">Image Upload</label>
+                            <input type="file" name="" accept="image/*" placeholder="Choose file" id="imageInput" multiple wire:model="event.images"{{--onchange="previewImage()"--}} class="border border-gray-300 rounded-md p-2 text-sm">
+                            <div class="flex" id="" >
+                                <div class="flex flex-wrap gap-3 p-2" id="preview">
+                                    @if ($event->images)
+                                        @foreach ($event->images as $image)
+                                            <img src="{{$image->temporaryUrl()}}" class="w-40 h-28 object-cover bg-white" alt="">
+                                        @endforeach
+
+                                    @endif
+                                </div>
+
+                            </div>
+                            @error('event.images.*')
+                                    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                        <span class="font-medium">{{$message}}</span>
+                                    </div>
+                            @enderror
+                        </div>
+                        <hr>
+                        <button class="inline-flex items-center px-4 py-2 bg-cyan-700 border border-transparent
+                        rounded-md font-semibold text-xs text-white uppercase tracking-widest
+                      hover:bg-gray-700 focus:bg-gray-700">save</button>
+                        <div @click = "modal = false" class="inline-flex items-center px-4 py-2
+                        rounded-md font-bold text-xs text-black uppercase tracking-widest border
+                      hover:shadow-xl cursor-pointer">cancel</div>
+                    </form>
+                </div>
+                </div>
+
+            </div>
+            {{-- events form database --}}
+            <div class="border border-slate-200 rounded-md bg-white p-6 mt-2 md:flex justify-between">
+                <div class="inline-flex justify-start">
+                    <img src="/gallery/event1.jpg" class="h-36" alt="">
+                    <div class="flex flex-col p-3 justify-start">
+                        <h1 class="font-bold text-xl">Artificial lake was launched at Arunachal</h1>
+                        <h2 class="text-slate-500">Date of Event: 21/08/2024</h2>
+
+                        <p class="line-clamp-3 text-pretty">Description Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis necessitatibus ratione tempore perspiciatis. Quod ullam perspiciatis sed error facere vero fuga quo ipsa. Hic excepturi doloremque, atque omnis saepe architecto.
+                            Aliquid, id perspiciatis? Ex et recusandae cupiditate perspiciatis neque accusantium, omnis minima eos molestiae, qui mollitia sit. Accusantium ipsum sint sapiente fuga, aliquam reiciendis molestias quo at modi, dolores nam.
+                            Aperiam tenetur quas natus eius vero nesciunt optio praesentium aliquid reprehenderit illo delectus vitae quasi adipisci quia maiores, enim iusto ab, error soluta at. Ullam maiores placeat consectetur nihil officia!
+                            Cum rerum nisi provident recusandae est odio architecto repudiandae laborum, fugit sequi at enim, iste saepe dolorum non placeat ducimus quo animi accusamus delectus quas! Consectetur, molestias delectus. Quis, laboriosam.
+                            Harum cumque et reiciendis laborum totam inventore nesciunt molestias neque libero, officiis necessitatibus quam facilis! Esse repellat aperiam optio dicta maxime iusto reiciendis vero necessitatibus harum excepturi, ad, iste inventore.
+                            Quam, voluptate suscipit inventore aspernatur, animi deserunt laborum enim perferendis sint earum quaerat nulla asperiores cum, ut corporis consequuntur nam facilis reiciendis. Dolorum sequi cum quis tempora veniam et non.
+                        </p>
+
+                    </div>
+                </div>
+
+                <div class="flex p-2 gap-2 items-start justify-end">
+                    <div class="">
+                        <i class="fa-solid fa-pen-to-square bg-green-400/50
+                                 hover:scale-110 ease-in-out duration-300
+                                 text-green-800 p-2 rounded-full cursor-pointer">
+                        </i>
+                    </div>
+                    <div class="">
+                        <i class="fa-regular fa-eye bg-blue-400/50
+                                 hover:scale-110 ease-in-out duration-300
+                                 text-blue-800 p-2 rounded-full cursor-pointer">
+                        </i>
+
+                    </div>
+
+                    <div class="">
+                        <i class="fa-solid fa-trash bg-red-400/50 rounded-full
+                                 hover:scale-110 ease-in-out duration-300
+                                 text-red-800 p-2  w-8 cursor-pointer text-center">
+                        </i>
+
+                    </div>
+                </div>
+
+            </div>
+
+
         </div>
     </div>
 </div>

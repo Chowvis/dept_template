@@ -2,9 +2,11 @@
 
 namespace App\Livewire;
 
-
+use App\Livewire\Forms\event;
 use App\Livewire\Forms\logoval;
+use App\Models\Event as ModelsEvent;
 use App\Models\External_logo;
+use App\Models\Gallery;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
@@ -12,6 +14,7 @@ use Livewire\Features\SupportFileUploads\WithFileUploads;
 class DeptMedia extends Component
 {
     use WithFileUploads;
+    public event $event;
     public logoval $logoval;
     public function render()
     {
@@ -74,5 +77,39 @@ class DeptMedia extends Component
         }
         $logo1->delete();
         $this->logoval->reset(['name','url','logoimage']);
+    }
+
+    public function addevent(){
+        $validated = $this->event->validate();
+        // dd($validated);
+        // $id = 10;
+        // if($this->event->images){
+        //     foreach($validated['images'] as $image){
+
+        //         $image->store('events','public');
+        //     }
+        // }
+
+        $event = ModelsEvent::create([
+            'title' => $validated['title'],
+            'date' => $validated['date'],
+            'description' => $validated['description'],
+        ]);
+
+        if($this->event->images){
+            foreach($validated['images'] as $image){
+                $path = $image->store('events/'.$event->id.'/images','public');
+                Gallery::create([
+                    'event_id' => $event->id,
+                    'images' => $path,
+               ]);
+
+            }
+        }
+
+
+
+
+
     }
 }
