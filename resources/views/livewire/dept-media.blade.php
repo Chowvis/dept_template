@@ -128,7 +128,21 @@
                                 </form>
                             </div>
                         </div>
-                        <div x-show="removecardleft" x-transition:enter.scale.20.duration.300ms x-transition:leave.scale.20.duration.100ms x-cloak class="p-16 bg-gray-100 fixed top-0 left-0 bottom-0 z-50 bg-slate-500/0 flex items-center justify-center w-full">
+                        <x-deletecard>
+                            <form wire:submit = "deletelogo1" class="flex justify-center gap-3">
+                                <button @click = "confirmmessage1 = true,removecardleft = false " class=" inline-flex items-center px-4 py-2 bg-red-600 border border-transparent
+                                rounded-md font-semibold text-xs text-white uppercase tracking-widest
+                                hover:bg-red-800 ">Delete
+                                </button>
+                                <div @click = "removecardleft = false" class=" inline-flex items-center px-4 py-2
+                                    rounded-md font-bold text-xs text-black uppercase tracking-widest border
+                                hover:shadow-xl hover:text-red-500 cursor-pointer">cancel
+                                </div>
+                            </form>
+                            hello
+
+                        </x-deletecard>
+                        {{-- <div x-show="removecardleft" x-transition:enter.scale.20.duration.300ms x-transition:leave.scale.20.duration.100ms x-cloak class="p-16 bg-gray-100 fixed top-0 left-0 bottom-0 z-50 bg-slate-500/0 flex items-center justify-center w-full">
                             <div class="w-full md:w-[50%] bg-white p-5 rounded-lg shadow-3xl relative">
                                 <i class="fa-solid fa-circle-xmark absolute right-2 top-1 text-red-500 text-xl hover:text-red-800 hover:scale-110 duration-200 ease-in-out" @click = "removecardleft = false"></i>
                                 <h1 class="text-center font-semibold text-xl p-2 mb-4">Are you sure to delete this logo?</h1>
@@ -145,7 +159,7 @@
                                 </form>
 
                             </div>
-                        </div>
+                        </div> --}}
                         <div x-show="confirmmessage1"
                             x-transition
                             x-cloak
@@ -176,15 +190,16 @@
                              hover:shadow-xl hover:bg-blue-700 cursor-pointer"><i  class="fa-regular fa-plus text-white text-xl mr-3"></i>Add Event
                 </div>
             </div>
+            {{-- form popup --}}
             <div x-show="modal" x-transition x-cloak class="p-16 bg-gray-100 fixed top-0 left-0 bottom-0 z-10 bg-slate-500/5 flex items-center justify-center w-full">
                 <div class="w-full md:w-[80%] bg-white p-5 rounded-lg shadow-3xl relative" >
                     <i class="fa-solid fa-circle-xmark absolute right-2 top-1 text-red-500 text-xl hover:text-red-800 hover:scale-110 duration-200 ease-in-out" @click = "modal = false"></i>
                     <h1 class="text-center font-semibold text-xl p-2">Add new Event</h1>
                     <div x-data="{showMessage: false}" x-init="window.addEventListener('flashMessage', () => { showMessage = true; setTimeout(() => { showMessage = false; }, 3000); })">
-                        @if (session('success'))
+                        @if (session('eventsuccess'))
 
                             <div x-show="showMessage" x-transition class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
-                                <span class="font-medium">{{session('success')}}</span>
+                                <span class="font-medium">{{session('eventsuccess')}}</span>
                             </div>
 
                         @endif
@@ -248,49 +263,61 @@
 
             </div>
             {{-- events form database --}}
-            <div class="border border-slate-200 rounded-md bg-white p-6 mt-2 md:flex justify-between">
-                <div class="inline-flex justify-start">
-                    <img src="/gallery/event1.jpg" class="h-36" alt="">
-                    <div class="flex flex-col p-3 justify-start">
-                        <h1 class="font-bold text-xl">Artificial lake was launched at Arunachal</h1>
-                        <h2 class="text-slate-500">Date of Event: 21/08/2024</h2>
+            @if ($events)
+                @foreach ($events as $event)
+                    <div class="border border-slate-200 rounded-md bg-white p-6 mt-2 md:flex justify-between">
+                        <div class="inline-flex justify-start">
+                            <img src="/storage/{{$event->Galleries->first()->images}}" class="h-36 w-48 object-cover" alt="">
+                            <div class="flex flex-col p-3 justify-start">
+                                <h1 class="font-bold text-xl">{{$event->title}}</h1>
+                                <h2 class="text-slate-500">Date of Event: {{$event->date}}</h2>
 
-                        <p class="line-clamp-3 text-pretty">Description Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis necessitatibus ratione tempore perspiciatis. Quod ullam perspiciatis sed error facere vero fuga quo ipsa. Hic excepturi doloremque, atque omnis saepe architecto.
-                            Aliquid, id perspiciatis? Ex et recusandae cupiditate perspiciatis neque accusantium, omnis minima eos molestiae, qui mollitia sit. Accusantium ipsum sint sapiente fuga, aliquam reiciendis molestias quo at modi, dolores nam.
-                            Aperiam tenetur quas natus eius vero nesciunt optio praesentium aliquid reprehenderit illo delectus vitae quasi adipisci quia maiores, enim iusto ab, error soluta at. Ullam maiores placeat consectetur nihil officia!
-                            Cum rerum nisi provident recusandae est odio architecto repudiandae laborum, fugit sequi at enim, iste saepe dolorum non placeat ducimus quo animi accusamus delectus quas! Consectetur, molestias delectus. Quis, laboriosam.
-                            Harum cumque et reiciendis laborum totam inventore nesciunt molestias neque libero, officiis necessitatibus quam facilis! Esse repellat aperiam optio dicta maxime iusto reiciendis vero necessitatibus harum excepturi, ad, iste inventore.
-                            Quam, voluptate suscipit inventore aspernatur, animi deserunt laborum enim perferendis sint earum quaerat nulla asperiores cum, ut corporis consequuntur nam facilis reiciendis. Dolorum sequi cum quis tempora veniam et non.
-                        </p>
+                                <p class="line-clamp-3 text-pretty">
+                                    {{$event->description}}
+                                </p>
+
+                            </div>
+                        </div>
+
+                        <div x-data = "{deleteevents:false}" class="flex p-2 gap-2 items-start justify-end">
+                            {{-- edit --}}
+                            <div class="">
+                                <i class="fa-solid fa-pen-to-square bg-green-400/50
+                                        hover:scale-110 ease-in-out duration-300
+                                        text-green-800 p-2 rounded-full cursor-pointer">
+                                </i>
+                            </div>
+                            <div>
+
+                            </div>
+                                {{-- view --}}
+                            <div class="">
+                                <i class="fa-regular fa-eye bg-blue-400/50
+                                        hover:scale-110 ease-in-out duration-300
+                                        text-blue-800 p-2 rounded-full cursor-pointer">
+                                </i>
+
+                            </div>
+                            {{-- delete button --}}
+                            <div  class="">
+                                <i @click = "deleteevents = true" class="fa-solid fa-trash bg-red-400/50 rounded-full
+                                        hover:scale-110 ease-in-out duration-300
+                                        text-red-800 p-2  w-8 cursor-pointer text-center">
+                                </i>
+
+                            </div>
+                            <x-deletecard>
+                                hello friends
+                            </x-deletecard>
+                        </div>
 
                     </div>
-                </div>
+                @endforeach
 
-                <div class="flex p-2 gap-2 items-start justify-end">
-                    <div class="">
-                        <i class="fa-solid fa-pen-to-square bg-green-400/50
-                                 hover:scale-110 ease-in-out duration-300
-                                 text-green-800 p-2 rounded-full cursor-pointer">
-                        </i>
-                    </div>
-                    <div class="">
-                        <i class="fa-regular fa-eye bg-blue-400/50
-                                 hover:scale-110 ease-in-out duration-300
-                                 text-blue-800 p-2 rounded-full cursor-pointer">
-                        </i>
+                {{ $events->links() }}
 
-                    </div>
+            @endif
 
-                    <div class="">
-                        <i class="fa-solid fa-trash bg-red-400/50 rounded-full
-                                 hover:scale-110 ease-in-out duration-300
-                                 text-red-800 p-2  w-8 cursor-pointer text-center">
-                        </i>
-
-                    </div>
-                </div>
-
-            </div>
 
 
         </div>

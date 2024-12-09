@@ -10,9 +10,11 @@ use App\Models\Gallery;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
+use Livewire\WithPagination;
 
 class DeptMedia extends Component
 {
+    use WithPagination;
     use WithFileUploads;
     public event $event;
     public logoval $logoval;
@@ -20,6 +22,9 @@ class DeptMedia extends Component
     {
 
         $logo1 = External_logo::where('logo_no','=','1')->first();
+        $logo2 = External_logo::where('logo_no','=','2')->first();
+        $events = ModelsEvent::latest()->paginate(5);
+        $galleries = Gallery::all();
         if($logo1){
             $this->logoval->name = $logo1->name;
             $this->logoval->url = $logo1->url;
@@ -27,10 +32,12 @@ class DeptMedia extends Component
             // $this->minister->profile_image = $logo1->profile_image;
 
         }
-        $logo2 = External_logo::where('logo_no','=','2')->first();
+
         return view('livewire.dept-media',[
             'logo1' => $logo1,
             'logo2' => $logo2,
+            'events' => $events,
+            'galleries' => $galleries,
         ]);
     }
 
@@ -81,14 +88,6 @@ class DeptMedia extends Component
 
     public function addevent(){
         $validated = $this->event->validate();
-        // dd($validated);
-        // $id = 10;
-        // if($this->event->images){
-        //     foreach($validated['images'] as $image){
-
-        //         $image->store('events','public');
-        //     }
-        // }
 
         $event = ModelsEvent::create([
             'title' => $validated['title'],
@@ -106,10 +105,15 @@ class DeptMedia extends Component
 
             }
         }
+        $this->event->reset();
+        session()->flash('eventsuccess', 'Event is updated successfully');
+        $this->dispatch('flashMessage');
+    }
 
-
-
-
-
+    public function deleteEvents(ModelsEvent $event){
+        $galleries = Gallery::where('event_id',$event->id);
+        $galleries->delete();
+        $event->delete();
+        // dd($event);
     }
 }

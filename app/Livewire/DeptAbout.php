@@ -6,6 +6,7 @@ namespace App\Livewire;
 use App\Livewire\Forms\minister;
 use App\Livewire\Forms\minister2;
 use App\Models\About;
+use App\Models\Event;
 use App\Models\Headofminister;
 use Exception;
 use Illuminate\Http\Request;
@@ -242,6 +243,9 @@ class DeptAbout extends Component
         }
         $card2->delete();
     }
+
+
+
 
 
 }
